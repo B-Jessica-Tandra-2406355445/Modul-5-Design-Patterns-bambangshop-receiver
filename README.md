@@ -61,7 +61,7 @@ You can install Postman via this website: https://www.postman.com/downloads/
 ## Mandatory Checklists (Subscriber)
 -   [v] Clone https://gitlab.com/ichlaffterlalu/bambangshop-receiver to a new repository.
 -   **STAGE 1: Implement models and repositories**
-    -   [ ] Commit: `Create Notification model struct.`
+    -   [v] Commit: `Create Notification model struct.`
     -   [v] Commit: `Create SubscriberRequest model struct.`
     -   [ ] Commit: `Create Notification database and Notification repository struct skeleton.`
     -   [ ] Commit: `Implement add function in Notification repository.`
