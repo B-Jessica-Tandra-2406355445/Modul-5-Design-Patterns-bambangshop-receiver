@@ -66,8 +66,8 @@ You can install Postman via this website: https://www.postman.com/downloads/
     -   [v] Commit: `Create Notification database and Notification repository struct skeleton.`
     -   [v] Commit: `Implement add function in Notification repository.`
     -   [v] Commit: `Implement list_all_as_string function in Notification repository.`
-    -   [ ] Write answers of your learning module's "Reflection Subscriber-1" questions in this README.
--   **STAGE 3: Implement services and controllers**
+    -   [v] Write answers of your learning module's "Reflection Subscriber-1" questions in this README.
+-   **STAGE 2: Implement services and controllers**
     -   [ ] Commit: `Create Notification service struct skeleton.`
     -   [ ] Commit: `Implement subscribe function in Notification service.`
     -   [ ] Commit: `Implement subscribe function in Notification controller.`
@@ -85,5 +85,15 @@ This is the place for you to write reflections:
 ### Mandatory (Subscriber) Reflections
 
 #### Reflection Subscriber-1
+
+> 1. In this tutorial, we used RwLock<> to synchronise the use of Vec of Notifications. Explain why it is necessary for this case, and explain why we do not use Mutex<> instead?
+
+Using a synchronization mechanism is necessary because the application operates in a multi-threaded web framework environment, and accessing a shared Vec<Notification> concurrently without locks would cause data races and memory corruption. Therefore, a lock is required.
+
+RwLock<> (Read-Write Lock) is chosen over Mutex<> (Mutual Exclusion) to improve performance in read-heavy scenarios of the application. A Mutex<> enforces strict, exclusive access, allowing only one single thread to access the data at any given time, regardless of whether it is reading or writing. In contrast, RwLock<> allows multiple threads to read the data simultaneously, and only enforces exclusive locking when a thread needs to write the data. Since a notification system typically involves far more read operations than write operations, using RwLock<> significantly improves the application's performance and prevents unnecessary read bottlenecks.
+
+> 2. In this tutorial, we used lazy_static external library to define Vec and DashMap as a “static” variable. Compared to Java where we can mutate the content of a static variable via a static function, why did not Rust allow us to do so? 
+
+While Java relies on a runtime Garbage Collector to manage memory and freely allows static variable mutation (leaving thread synchronization entirely to the developer), Rust strictly enforces memory and thread safety at compile-time via its ownership and borrow checker system. Mutating a global static variable accessible by multiple threads inherently risks data races, which Rust strictly prohibits by default to prevent concurrency bugs. Furthermore, Rust mandates that standard static variables must be initialized using constant expressions evaluated at compile time. Complex, heap-allocated data structures like Vec and DashMap cannot be initialized this way. The lazy_static macro bridges this gap by deferring the heap allocation and initialization until the exact moment the variable is first accessed at runtime. When combined with thread-safe wrappers like RwLock, it safely enables a global, mutable state that fully satisfies Rust's strict safety guarantees.
 
 #### Reflection Subscriber-2
