@@ -77,7 +77,7 @@ You can install Postman via this website: https://www.postman.com/downloads/
     -   [v] Commit: `Implement receive function in Notification controller.`
     -   [v] Commit: `Implement list_messages function in Notification service.`
     -   [v] Commit: `Implement list function in Notification controller.`
-    -   [ ] Write answers of your learning module's "Reflection Subscriber-2" questions in this README.
+    -   [v] Write answers of your learning module's "Reflection Subscriber-2" questions in this README.
 
 ## Your Reflections
 This is the place for you to write reflections:
@@ -97,3 +97,15 @@ RwLock<> (Read-Write Lock) is chosen over Mutex<> (Mutual Exclusion) to improve 
 While Java relies on a runtime Garbage Collector to manage memory and freely allows static variable mutation (leaving thread synchronization entirely to the developer), Rust strictly enforces memory and thread safety at compile-time via its ownership and borrow checker system. Mutating a global static variable accessible by multiple threads inherently risks data races, which Rust strictly prohibits by default to prevent concurrency bugs. Furthermore, Rust mandates that standard static variables must be initialized using constant expressions evaluated at compile time. Complex, heap-allocated data structures like Vec and DashMap cannot be initialized this way. The lazy_static macro bridges this gap by deferring the heap allocation and initialization until the exact moment the variable is first accessed at runtime. When combined with thread-safe wrappers like RwLock, it safely enables a global, mutable state that fully satisfies Rust's strict safety guarantees.
 
 #### Reflection Subscriber-2
+
+> 1. Have you explored things outside of the steps in the tutorial, for example: src/lib.rs? If not, explain why you did not do so. If yes, explain things that you have learned from those other parts of code. 
+
+Yes, I have explored src/lib.rs. I learned that it serves as the central configuration and utility module for the application. It implements the Singleton pattern using lazy_static to initialize a single, globally available REQWEST_CLIENT and APP_CONFIG. This ensures that only one instance of the HTTP client and configuration exists and is reused across the entire application, preventing the overhead of redundant initializations. For the configuration itself, APP_CONFIG utilizes dotenvy and Rocket's figment library to dynamically load environment variables (like ports and root URLs) from the .env file. Furthermore, the file centralizes error handling by defining a custom Result type and a compose_error_response function, which ensures that all HTTP error responses are consistently formatted as JSON across the entire application.
+
+> 2. Since you have completed the tutorial by now and have tried to test your notification system by spawning multiple instances of Receiver, explain how Observer pattern eases you to plug in more subscribers. How about spawning more than one instance of Main app, will it still be easy enough to add to the system? 
+
+The Observer pattern makes adding subscribers effortless due to loose coupling. The Main app only needs to store subscriber endpoint URLs, allowing new receivers to dynamically register themselves at runtime without any code modifications. However, spawning multiple instances of the Main app would be difficult. The current system relies heavily on local in-memory storage (lazy_static, DashMap, and RwLock), meaning each publisher instance would have an isolated, unsynchronized memory state. Supporting multiple Main apps would require a major architectural overhaul to implement a centralized external database to share subscriber and product data consistently across all instances.
+
+> 3. Have you tried to make your own Tests, or enhance documentation on your Postman collection? If you have tried those features, tell us whether it is useful for your work (it can be your tutorial work or your Group Project). 
+
+I have not created custom tests or enhanced the Postman documentation for this tutorial, as my primary focus was on the core implementation. However, I understand how to write automated scripts in the "Tests" tab to verify HTTP status codes (e.g., 200 OK) and validate JSON response structures. I plan to fully utilize this feature for the upcoming Group Project. Automated API testing ensures response consistency, prevents breaking changes, and heavily simplifies backend-frontend integration without the need for manual checking.
