@@ -72,7 +72,7 @@ You can install Postman via this website: https://www.postman.com/downloads/
     -   [v] Commit: `Implement subscribe function in Notification service.`
     -   [v] Commit: `Implement subscribe function in Notification controller.`
     -   [v] Commit: `Implement unsubscribe function in Notification service.`
-    -   [ ] Commit: `Implement unsubscribe function in Notification controller.`
+    -   [v] Commit: `Implement unsubscribe function in Notification controller.`
     -   [ ] Commit: `Implement receive_notification function in Notification service.`
     -   [ ] Commit: `Implement receive function in Notification controller.`
     -   [ ] Commit: `Implement list_messages function in Notification service.`
